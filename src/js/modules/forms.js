@@ -1,11 +1,9 @@
-// import checkNumInputs from './checkNumInputs';
+import {postData} from '../services/requsets';
 
 const forms = () => {
     const form = document.querySelectorAll('form');
     const inputs = document.querySelectorAll('input');
     const upload = document.querySelectorAll('[name="upload"]');
-    
-    // checkNumInputs('input[name="user_phone"]');
 
     const message = {
         loading: 'Загрузка',
@@ -21,17 +19,6 @@ const forms = () => {
         question: 'http://localhost:3000/question'
     }
 
-    const postData = async (url, data) => {
-        let res = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: data
-        });
-        // return await res.text();
-        return await res.json();
-    };
     const clearInputs = () => {
         inputs.forEach(item => {
             item.value = '';
