@@ -1,0 +1,49 @@
+{
+  "styles": [
+    {
+      "src": "assets/img/styles-5.jpg",
+      "title": "Пастелью",
+      "link": "#pastel"
+    },
+    {
+      "src": "assets/img/styles-6.jpg",
+      "title": "Поп-арт",
+      "link": "#popart"
+    },
+    {
+      "src": "assets/img/styles-7.png",
+      "title": "Фотомозаика",
+      "link": "#mozaika"
+    },
+    {
+      "src": "assets/img/styles-8.jpg",
+      "title": "Шарж",
+      "link": "#sharj"
+    }
+  ],
+  "designer": [
+    {
+      "upload": {},
+      "name": "Сергей Чудинов",
+      "phone": "+8 (926) 350 94 62",
+      "email": "sergeychudinov1986@gmail.com",
+      "message": "1",
+      "id": 1
+    },
+    {
+      "upload": {},
+      "name": "Сергей Чудинов",
+      "phone": "+8 (926) 350 94 62",
+      "email": "sergeychudinov1986@gmail.com",
+      "message": "777",
+      "id": 2
+    }
+  ],
+  "question": [
+    {
+      "name": "Сергей Чудинов",
+      "phone": "+7 (2",
+      "id": 1
+    }
+  ]
+}
