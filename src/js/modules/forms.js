@@ -1,6 +1,6 @@
 import {postData} from '../services/requsets';
 
-const forms = () => {
+const forms = (state) => {
     const form = document.querySelectorAll('form');
     const inputs = document.querySelectorAll('input');
     const upload = document.querySelectorAll('[name="upload"]');
@@ -26,6 +26,9 @@ const forms = () => {
         upload.forEach(item => {
             item.previousElementSibling.textContent = 'Файл не выбран';
         })
+        document.querySelectorAll('select').forEach(el => {
+            el.selectedIndex = 0;
+        })
     };
 
     upload.forEach(item => {
@@ -43,6 +46,17 @@ const forms = () => {
         item.addEventListener('submit', (e) => {
             e.preventDefault();
             
+            const formData = new FormData(item);
+
+            if (item.classList.contains('calc_form')) {
+                if (!state.size || !state.material) {
+                    return
+                }
+                for(let key in state) {
+                    formData.append(key, state[key])
+                }
+            }
+
             let statusMessage = document.createElement('div');
             statusMessage.classList.add('status');
             item.parentNode.appendChild(statusMessage);
@@ -61,7 +75,6 @@ const forms = () => {
             textMessage.textContent = message.loading;
             statusMessage.appendChild(textMessage);
 
-            const formData = new FormData(item);
             let api;
             item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api = path.question;
             console.log(api);
