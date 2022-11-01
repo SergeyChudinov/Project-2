@@ -24,26 +24,13 @@
   "designer": [
     {
       "upload": {},
-      "name": "Сергей Чудинов",
-      "phone": "+8 (926) 350 94 62",
-      "email": "sergeychudinov1986@gmail.com",
-      "message": "1",
+      "promocode": "IWANTPOPART",
+      "size": "1000",
+      "material": "1",
+      "sum": "700",
+      "options": "0",
       "id": 1
-    },
-    {
-      "upload": {},
-      "name": "Сергей Чудинов",
-      "phone": "+8 (926) 350 94 62",
-      "email": "sergeychudinov1986@gmail.com",
-      "message": "777",
-      "id": 2
     }
   ],
-  "question": [
-    {
-      "name": "Сергей Чудинов",
-      "phone": "+7 (2",
-      "id": 1
-    }
-  ]
+  "question": []
 }
