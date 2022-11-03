@@ -4,6 +4,7 @@ const forms = (state) => {
     const form = document.querySelectorAll('form');
     const inputs = document.querySelectorAll('input');
     const upload = document.querySelectorAll('[name="upload"]');
+    const textarea = document.querySelectorAll('textarea');
 
     const message = {
         loading: 'Загрузка',
@@ -29,6 +30,7 @@ const forms = (state) => {
         document.querySelectorAll('select').forEach(el => {
             el.selectedIndex = 0;
         })
+        textarea[0].value = '';
     };
 
     upload.forEach(item => {
@@ -77,15 +79,11 @@ const forms = (state) => {
 
             let api;
             item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api = path.question;
-            console.log(api);
 
-            console.log(formData);
             const json = JSON.stringify(Object.fromEntries(formData.entries()));
-            console.log(json);
 
             postData(api, json)
                 .then(data => {
-                    console.log(data);
                     statusImg.setAttribute('src', message.ok);
                     // statusImg.src = message.ok;
                     textMessage.textContent = message.success;

@@ -21,16 +21,52 @@
       "link": "#sharj"
     }
   ],
+  "calc": {
+    "size": {
+      "empty": "empty",
+      "small": "500",
+      "average": "1000",
+      "big": "1500",
+      "theBiggest": "2000"
+    },
+    "material": {
+      "empty": "empty",
+      "fiberCanvas": "1",
+      "linenCanvas": "1.2",
+      "naturalCottonCanvas": "1.5"
+    },
+    "options": {
+      "empty": "0",
+      "coatingWithArtGel": "1000",
+      "expressProduction": "2000",
+      "delivery": "500"
+    }
+  },
   "designer": [
     {
       "upload": {},
-      "promocode": "IWANTPOPART",
-      "size": "1000",
-      "material": "1",
-      "sum": "700",
-      "options": "0",
+      "promocode": "",
+      "size": "theBiggest",
+      "material": "naturalCottonCanvas",
+      "sum": "5000",
+      "options": "expressProduction",
       "id": 1
+    },
+    {
+      "upload": {},
+      "promocode": "IWANTPOPART",
+      "size": "theBiggest",
+      "sum": "3500",
+      "material": "naturalCottonCanvas",
+      "options": "expressProduction",
+      "id": 2
     }
   ],
-  "question": []
+  "question": [
+    {
+      "name": "Сергей Чудинов",
+      "phone": "+7 (926) 350 94 62",
+      "id": 1
+    }
+  ]
 }
