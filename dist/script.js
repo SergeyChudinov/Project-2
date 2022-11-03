@@ -4936,65 +4936,163 @@ window.addEventListener('DOMContentLoaded', function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_object_to_string__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.to-string */ "./node_modules/core-js/modules/es.object.to-string.js");
+/* harmony import */ var core_js_modules_es_object_to_string__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_promise__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.promise */ "./node_modules/core-js/modules/es.promise.js");
+/* harmony import */ var core_js_modules_es_promise__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
+/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _services_requsets__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/requsets */ "./src/js/services/requsets.js");
+
+
+
+// const calc = (size, material, options, promocode, result, state) => {
+//     const sizeBlock = document.querySelector(size);
+//     const materialBlock = document.querySelector(material);
+//     const optionsBlock = document.querySelector(options);
+//     const promocodeBlock = document.querySelector(promocode);
+//     const resultBlock = document.querySelector(result);
+//     let sum = 0;
+//     const calcFunc = () => {
+//         sum = Math.round((+sizeBlock.value) * (+materialBlock.value) + (+optionsBlock.value));
+//         if (sizeBlock.value == '' || materialBlock.value == '') {
+//             resultBlock.textContent = 'Пожалуйста, выберите размер и материал картины'
+//         } else if (promocodeBlock.value === 'IWANTPOPART') {
+//             resultBlock.textContent = Math.round(sum * 0.7);
+//             state['sum'] = Math.round(sum * 0.7);
+//         } else {
+//             resultBlock.textContent = sum;
+//             state['sum'] = sum;
+//         }
+//     };
+//     sizeBlock.addEventListener('change', () => {
+//         calcFunc()
+//     });
+//     materialBlock.addEventListener('change', () => {
+//         calcFunc()
+//     });
+//     optionsBlock.addEventListener('change', () => {
+//         calcFunc()
+//     });
+//     promocodeBlock.addEventListener('input', () => {
+//         calcFunc()
+//     });
+// };
+// export default calc;
+
+
 var calc = function calc(size, material, options, promocode, result, state) {
   var sizeBlock = document.querySelector(size);
   var materialBlock = document.querySelector(material);
   var optionsBlock = document.querySelector(options);
   var promocodeBlock = document.querySelector(promocode);
   var resultBlock = document.querySelector(result);
-  var sum = 0;
+  var sum = 0,
+      sizePrice = null,
+      materialPrice = null,
+      optionPrice = null;
+
+  var getPrice = function getPrice(value, resourse) {
+    var res;
+    return regeneratorRuntime.async(function getPrice$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return regeneratorRuntime.awrap(Object(_services_requsets__WEBPACK_IMPORTED_MODULE_3__["getResource"])('http://localhost:3000/calc'));
+
+          case 2:
+            res = _context.sent;
+            return _context.abrupt("return", res[resourse][value]);
+
+          case 4:
+          case "end":
+            return _context.stop();
+        }
+      }
+    });
+  };
 
   var calcFunc = function calcFunc() {
-    sum = Math.round(+sizeBlock.value * +materialBlock.value + +optionsBlock.value);
-
-    if (sizeBlock.value == '' || materialBlock.value == '') {
+    if (sizeBlock.value == "" || materialBlock.value == "") {
       resultBlock.textContent = 'Пожалуйста, выберите размер и материал картины';
     } else if (promocodeBlock.value === 'IWANTPOPART') {
-      resultBlock.textContent = Math.round(sum * 0.7);
-      state['sum'] = Math.round(sum * 0.7);
+      sum = Math.round((+sizePrice * +materialPrice + +optionPrice) * 0.7);
+      resultBlock.textContent = sum;
+      state['sum'] = sum;
     } else {
+      sum = Math.round(+sizePrice * +materialPrice + +optionPrice);
       resultBlock.textContent = sum;
       state['sum'] = sum;
     }
   };
 
-  sizeBlock.addEventListener('change', function () {
-    calcFunc();
+  sizeBlock.addEventListener('change', function _callee(e) {
+    var value;
+    return regeneratorRuntime.async(function _callee$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            value = e.target.value;
+            _context2.next = 3;
+            return regeneratorRuntime.awrap(getPrice(value, 'size'));
+
+          case 3:
+            sizePrice = _context2.sent;
+            calcFunc();
+
+          case 5:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    });
   });
-  materialBlock.addEventListener('change', function () {
-    calcFunc();
+  materialBlock.addEventListener('change', function _callee2(e) {
+    var value;
+    return regeneratorRuntime.async(function _callee2$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            value = e.target.value;
+            _context3.next = 3;
+            return regeneratorRuntime.awrap(getPrice(value, 'material'));
+
+          case 3:
+            materialPrice = _context3.sent;
+            calcFunc();
+
+          case 5:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    });
   });
-  optionsBlock.addEventListener('change', function () {
-    calcFunc();
+  optionsBlock.addEventListener('change', function _callee3(e) {
+    var value;
+    return regeneratorRuntime.async(function _callee3$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            value = e.target.value;
+            _context4.next = 3;
+            return regeneratorRuntime.awrap(getPrice(value, 'options'));
+
+          case 3:
+            optionPrice = _context4.sent;
+            calcFunc();
+
+          case 5:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    });
   });
   promocodeBlock.addEventListener('input', function () {
     calcFunc();
-  }); // let state = {};
-  // let hasPromocode = 1;
-  // function bindActionToElems (elem, prop) {
-  //     elem.addEventListener('change', () => {
-  //         state[prop] = elem.value;
-  //         console.log(state);
-  //     });
-  //     console.log(state.size);
-  //     if (state.size && state.material && state.options) {
-  //         console.log(state.size);
-  //         promocodeBlock.addEventListener('input', (e) => {
-  //             if (e.target.value === 'IWANTPOPART') {
-  //                 hasPromocode = 0.7;
-  //                 console.log(hasPromocode);
-  //                 sum = ((+state.size) * (+state.material) + +state.options)
-  //                 resultBlock.textContent = sum
-  //             }
-  //         })
-  //     }
-  // };
-  // console.log(state);
-  // sum = ((+state.size) * (+state.material) + +state.options)
-  // resultBlock.textContent = sum;
-  // bindActionToElems(sizeBlock, 'size');
-  // bindActionToElems(materialBlock, 'material');
-  // bindActionToElems(optionsBlock, 'options');
+  });
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (calc);
@@ -5115,6 +5213,7 @@ var forms = function forms(state) {
   var form = document.querySelectorAll('form');
   var inputs = document.querySelectorAll('input');
   var upload = document.querySelectorAll('[name="upload"]');
+  var textarea = document.querySelectorAll('textarea');
   var message = {
     loading: 'Загрузка',
     success: 'Спасибо! Мы с вами саяжемся!',
@@ -5138,6 +5237,7 @@ var forms = function forms(state) {
     document.querySelectorAll('select').forEach(function (el) {
       el.selectedIndex = 0;
     });
+    textarea[0].value = '';
   };
 
   upload.forEach(function (item) {
@@ -5181,12 +5281,8 @@ var forms = function forms(state) {
       statusMessage.appendChild(textMessage);
       var api;
       item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api = path.question;
-      console.log(api);
-      console.log(formData);
       var json = JSON.stringify(Object.fromEntries(formData.entries()));
-      console.log(json);
       Object(_services_requsets__WEBPACK_IMPORTED_MODULE_9__["postData"])(api, json).then(function (data) {
-        console.log(data);
         statusImg.setAttribute('src', message.ok); // statusImg.src = message.ok;
 
         textMessage.textContent = message.success;
