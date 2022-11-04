@@ -6,6 +6,7 @@ import checkTextInputs from './modules/checkTextInputs';
 import showMoreStyles from './modules/showMoreStyles';
 import calc from './modules/calc';
 import filter from './modules/filter';
+import pictureSize from './modules/pictureSize';
 
 import changeModalState from './modules/changeModalState';
 
@@ -25,5 +26,6 @@ window.addEventListener('DOMContentLoaded', () => {
     showMoreStyles('.button-transparent', '#styles .row'); // 3
     calc('#size', '#material', '#options', '.promocode', '.calc-price', modalState);
     filter();
+    pictureSize('.sizes-block');
 });
 
