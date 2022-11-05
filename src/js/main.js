@@ -8,6 +8,7 @@ import calc from './modules/calc';
 import filter from './modules/filter';
 import pictureSize from './modules/pictureSize';
 import accordion from './modules/accordion';
+import burger from './modules/burger';
 
 import changeModalState from './modules/changeModalState';
 
@@ -30,5 +31,6 @@ window.addEventListener('DOMContentLoaded', () => {
     pictureSize('.sizes-block');
     accordion('#accordion', '.accordion-block');     // 1
     // accordion('.accordion-heading', '.accordion-block');     // 2-3
+    burger('.burger', '.burger-menu');
 });
 
