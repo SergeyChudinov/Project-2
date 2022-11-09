@@ -60,6 +60,15 @@
       "material": "naturalCottonCanvas",
       "options": "expressProduction",
       "id": 2
+    },
+    {
+      "upload": {},
+      "promocode": "",
+      "size": "small",
+      "material": "fiberCanvas",
+      "sum": "1500",
+      "options": "coatingWithArtGel",
+      "id": 3
     }
   ],
   "question": [

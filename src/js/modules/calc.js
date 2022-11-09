@@ -54,7 +54,7 @@ const calc = (size, material, options, promocode, result, state) => {
     }
 
     const calcFunc = () => {
-        if (sizeBlock.value == "" || materialBlock.value == "") {
+        if (sizeBlock.value == "empty" || materialBlock.value == "empty") {
             resultBlock.textContent = 'Пожалуйста, выберите размер и материал картины'
         } else if (promocodeBlock.value === 'IWANTPOPART') {
             sum = Math.round((+sizePrice * +materialPrice + +optionPrice) * 0.7);
