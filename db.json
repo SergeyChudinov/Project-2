@@ -43,35 +43,12 @@
     }
   },
   "designer": [
-    {
-      "upload": {},
-      "promocode": "",
-      "size": "theBiggest",
-      "material": "naturalCottonCanvas",
-      "sum": "5000",
-      "options": "expressProduction",
-      "id": 1
-    },
-    {
-      "upload": {},
-      "promocode": "IWANTPOPART",
-      "size": "theBiggest",
-      "sum": "3500",
-      "material": "naturalCottonCanvas",
-      "options": "expressProduction",
-      "id": 2
-    },
-    {
-      "upload": {},
-      "promocode": "",
-      "size": "small",
-      "material": "fiberCanvas",
-      "sum": "1500",
-      "options": "coatingWithArtGel",
-      "id": 3
-    }
+    
   ],
   "question": [
+    
+  ],
+  "img": [
     {
       "name": "Сергей Чудинов",
       "phone": "+7 (926) 350 94 62",
