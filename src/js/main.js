@@ -12,6 +12,8 @@ import burger from './modules/burger';
 import scrolling from './modules/scrolling';
 import drop from './modules/drop';
 
+import addImg from './modules/addImg';
+
 import changeModalState from './modules/changeModalState';
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -35,6 +37,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // accordion('.accordion-heading', '.accordion-block');     // 2-3
     burger('.burger', '.burger-menu');
     scrolling('.pageup');
-    drop()
+    drop(modalState);
+    addImg();
 });
 

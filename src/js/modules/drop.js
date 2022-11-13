@@ -1,6 +1,6 @@
 import {postData} from '../services/requsets';
 
-const drop = () => {
+const drop = (state) => {
     const fileInputs = document.querySelectorAll('[name="upload"]');
 
     ['dragenter', 'dragleave', 'dragover', 'drop'].forEach(eventName => {
@@ -8,15 +8,17 @@ const drop = () => {
             input.addEventListener(eventName, preventDefault, false);
         });
     });
+
     function preventDefault(e) {
         e.preventDefault();
         e.stopPropagation(); // остановим всплытие
     }
-    
+
     function highlight(item) {
         item.closest('.file_upload').style.border = '5px solid yellow';
         item.closest('.file_upload').style.backgroundColor = 'rgba(0,0,0, .7)';
     }
+
     function unhighlight(item) {
         item.closest('.file_upload').style.border = 'none';
         // if (item.closest('.calc_form')) {
@@ -43,22 +45,77 @@ const drop = () => {
     fileInputs.forEach(input => {
         input.addEventListener('drop', (e) => {
             input.files = e.dataTransfer.files;
-            console.log(input.files)
-            // const json = JSON.stringify(Object.fromEntries(input.files.entries()));
-            // const json =  {
-            //     name: "Сергей Чудинов",
-            //     phone: "+7 (926) 350 94 62",
-            //     id: 1
-            //   };
-            // postData('http://localhost:3000/img', json)
-            //     .then(data => console.log(data));
+            
+            var reader = new FileReader();
+            reader.readAsDataURL(input.files[0]);
+            reader.onloadend = function () {
+                var base64String = reader.result;
+                const json = {
+                    name: input.files[0].name,
+                    data: base64String,
+                };
+                if (!input.closest('form')) {
+                    postData('http://localhost:3000/img', JSON.stringify(json));
+                } else {
+                    state['upload'] = json.data;
+                    state['imgName'] = json.name;
+                }               
+            };
+            
             let dots;
             const arr = input.files[0].name.split('.');
             arr[0].length > 6 ? dots = '...' : dots = '.';
             const name = arr[0].substring(0, 7) + dots + arr[1];
             input.previousElementSibling.textContent = name;
+            const preview = input.parentNode.parentNode.querySelector('img');
+            previewFile(input, preview);
         });
     });
+
+    fileInputs.forEach(input => {
+        input.addEventListener('input', () => {
+            var reader = new FileReader();
+            reader.readAsDataURL(input.files[0]);
+            reader.onloadend = function () {
+                var base64String = reader.result;
+                const json = {
+                    name: input.files[0].name,
+                    data: base64String,
+                };
+                if (!input.closest('form')) {
+                    postData('http://localhost:3000/img', JSON.stringify(json));
+                } else {
+                    state['upload'] = json.data;
+                    state['imgName'] = json.name;
+                }
+                
+            };
+
+            let dots;
+            const arr = input.files[0].name.split('.');
+            arr[0].length > 6 ? dots = '...' : dots = '.';
+            const name = arr[0].substring(0, 7) + dots + arr[1];
+            input.previousElementSibling.textContent = name;
+            const preview = input.parentNode.parentNode.querySelector('img');
+            previewFile(input, preview);
+        })
+    });
+
+    function previewFile(input, preview) {
+        var file = input.files[0];
+        var reader = new FileReader();
+
+        reader.onloadend = function () {
+            preview.src = reader.result;
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "";
+        }
+        preview.style.display = 'block';
+    }
 };
 export default drop;
 

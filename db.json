@@ -42,17 +42,7 @@
       "delivery": "500"
     }
   },
-  "designer": [
-    
-  ],
-  "question": [
-    
-  ],
-  "img": [
-    {
-      "name": "Сергей Чудинов",
-      "phone": "+7 (926) 350 94 62",
-      "id": 1
-    }
-  ]
+  "designer": [],
+  "question": [],
+  "img": []
 }

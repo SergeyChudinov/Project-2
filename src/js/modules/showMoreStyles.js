@@ -73,7 +73,6 @@ const showMoreStyles = (trigger, wrapper) => {
                 createCards(res);
             })
             .catch(error => {
-                console.log(error);
                 let statusMessage = document.createElement('div');
                 statusMessage.classList.add('status');
                 statusMessage.style.cssText = 'color: red; font-size: 20px; margin: 30px;';

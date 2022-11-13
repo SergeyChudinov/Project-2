@@ -4961,7 +4961,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_burger__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/burger */ "./src/js/modules/burger.js");
 /* harmony import */ var _modules_scrolling__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/scrolling */ "./src/js/modules/scrolling.js");
 /* harmony import */ var _modules_drop__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./modules/drop */ "./src/js/modules/drop.js");
-/* harmony import */ var _modules_changeModalState__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./modules/changeModalState */ "./src/js/modules/changeModalState.js");
+/* harmony import */ var _modules_addImg__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./modules/addImg */ "./src/js/modules/addImg.js");
+/* harmony import */ var _modules_changeModalState__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./modules/changeModalState */ "./src/js/modules/changeModalState.js");
+
 
 
 
@@ -4980,7 +4982,7 @@ window.addEventListener('DOMContentLoaded', function () {
   "use strict";
 
   var modalState = {};
-  Object(_modules_changeModalState__WEBPACK_IMPORTED_MODULE_13__["default"])(modalState);
+  Object(_modules_changeModalState__WEBPACK_IMPORTED_MODULE_14__["default"])(modalState);
   Object(_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])();
   Object(_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])('.main-slider-item', 'vertical');
   Object(_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])('.feedback-slider-item', '', '.main-prev-btn', '.main-next-btn');
@@ -4999,7 +5001,8 @@ window.addEventListener('DOMContentLoaded', function () {
 
   Object(_modules_burger__WEBPACK_IMPORTED_MODULE_10__["default"])('.burger', '.burger-menu');
   Object(_modules_scrolling__WEBPACK_IMPORTED_MODULE_11__["default"])('.pageup');
-  Object(_modules_drop__WEBPACK_IMPORTED_MODULE_12__["default"])();
+  Object(_modules_drop__WEBPACK_IMPORTED_MODULE_12__["default"])(modalState);
+  Object(_modules_addImg__WEBPACK_IMPORTED_MODULE_13__["default"])();
 });
 
 /***/ }),
@@ -5137,6 +5140,36 @@ var accordion = function accordion(accordionSelector, blockSelector) {
 //     });
 // };
 // export default accordion;
+
+/***/ }),
+
+/***/ "./src/js/modules/addImg.js":
+/*!**********************************!*\
+  !*** ./src/js/modules/addImg.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _services_requsets__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/requsets */ "./src/js/services/requsets.js");
+
+
+var addImg = function addImg() {
+  var addImgButton = document.querySelector('.addImg');
+  var img = document.querySelector('.getImg');
+  img.style.cssText = 'width: 200px; hight: 200px';
+  addImgButton.addEventListener('click', function () {
+    Object(_services_requsets__WEBPACK_IMPORTED_MODULE_0__["getResource"])('http://localhost:3000/img').then(function (data) {
+      if (data.length !== 0) {
+        console.log(data);
+        img.src = data[0].data;
+      }
+    });
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (addImg);
 
 /***/ }),
 
@@ -5361,6 +5394,7 @@ var changeModalState = function changeModalState(state) {
   function bindActionToElems(elem, prop) {
     elem.addEventListener('change', function () {
       state[prop] = elem.value;
+      console.log(state);
     });
   }
 
@@ -5425,7 +5459,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var drop = function drop() {
+var drop = function drop(state) {
   var fileInputs = document.querySelectorAll('[name="upload"]');
   ['dragenter', 'dragleave', 'dragover', 'drop'].forEach(function (eventName) {
     fileInputs.forEach(function (input) {
@@ -5472,22 +5506,79 @@ var drop = function drop() {
   fileInputs.forEach(function (input) {
     input.addEventListener('drop', function (e) {
       input.files = e.dataTransfer.files;
-      console.log(input.files); // const json = JSON.stringify(Object.fromEntries(input.files.entries()));
-      // const json =  {
-      //     name: "Сергей Чудинов",
-      //     phone: "+7 (926) 350 94 62",
-      //     id: 1
-      //   };
-      // postData('http://localhost:3000/img', json)
-      //     .then(data => console.log(data));
+      var reader = new FileReader();
+      reader.readAsDataURL(input.files[0]);
+
+      reader.onloadend = function () {
+        var base64String = reader.result;
+        var json = {
+          name: input.files[0].name,
+          data: base64String
+        };
+
+        if (!input.closest('form')) {
+          Object(_services_requsets__WEBPACK_IMPORTED_MODULE_3__["postData"])('http://localhost:3000/img', JSON.stringify(json));
+        } else {
+          state['upload'] = json.data;
+          state['imgName'] = json.name;
+        }
+      };
 
       var dots;
       var arr = input.files[0].name.split('.');
       arr[0].length > 6 ? dots = '...' : dots = '.';
       var name = arr[0].substring(0, 7) + dots + arr[1];
       input.previousElementSibling.textContent = name;
+      var preview = input.parentNode.parentNode.querySelector('img');
+      previewFile(input, preview);
     });
   });
+  fileInputs.forEach(function (input) {
+    input.addEventListener('input', function () {
+      var reader = new FileReader();
+      reader.readAsDataURL(input.files[0]);
+
+      reader.onloadend = function () {
+        var base64String = reader.result;
+        var json = {
+          name: input.files[0].name,
+          data: base64String
+        };
+
+        if (!input.closest('form')) {
+          Object(_services_requsets__WEBPACK_IMPORTED_MODULE_3__["postData"])('http://localhost:3000/img', JSON.stringify(json));
+        } else {
+          state['upload'] = json.data;
+          state['imgName'] = json.name;
+        }
+      };
+
+      var dots;
+      var arr = input.files[0].name.split('.');
+      arr[0].length > 6 ? dots = '...' : dots = '.';
+      var name = arr[0].substring(0, 7) + dots + arr[1];
+      input.previousElementSibling.textContent = name;
+      var preview = input.parentNode.parentNode.querySelector('img');
+      previewFile(input, preview);
+    });
+  });
+
+  function previewFile(input, preview) {
+    var file = input.files[0];
+    var reader = new FileReader();
+
+    reader.onloadend = function () {
+      preview.src = reader.result;
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    } else {
+      preview.src = "";
+    }
+
+    preview.style.display = 'block';
+  }
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (drop); // События претаскивания
@@ -5641,14 +5732,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_promise__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.promise.finally */ "./node_modules/core-js/modules/es.promise.finally.js");
 /* harmony import */ var core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.string.split */ "./node_modules/core-js/modules/es.string.split.js");
-/* harmony import */ var core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/web.dom-collections.iterator */ "./node_modules/core-js/modules/web.dom-collections.iterator.js");
-/* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _services_requsets__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../services/requsets */ "./src/js/services/requsets.js");
-
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/web.dom-collections.iterator */ "./node_modules/core-js/modules/web.dom-collections.iterator.js");
+/* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _services_requsets__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../services/requsets */ "./src/js/services/requsets.js");
 
 
 
@@ -5683,23 +5771,23 @@ var forms = function forms(state) {
     });
     upload.forEach(function (item) {
       item.previousElementSibling.textContent = 'Файл не выбран';
+      var preview = item.parentNode.parentNode.querySelector('img');
+      preview.src = '';
+      preview.style.display = 'none';
     });
     document.querySelectorAll('select').forEach(function (el) {
       el.selectedIndex = 0;
     });
-    textarea[0].value = '';
+    textarea[0].value = ''; // state = {};
+    // item.files = 
+    // console.log(upload.files)
+    // upload.forEach(item => {
+    //     console.log(item.files)
+    //     item.files = {};
+    // })
+    // console.log(state)
   };
 
-  upload.forEach(function (item) {
-    item.addEventListener('input', function () {
-      console.log(item.files[0]);
-      var dots;
-      var arr = item.files[0].name.split('.');
-      arr[0].length > 6 ? dots = '...' : dots = '.';
-      var name = arr[0].substring(0, 7) + dots + arr[1];
-      item.previousElementSibling.textContent = name;
-    });
-  });
   form.forEach(function (item) {
     item.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -5712,6 +5800,12 @@ var forms = function forms(state) {
 
         for (var key in state) {
           formData.append(key, state[key]);
+        }
+      }
+
+      if (item.classList.contains('img_form')) {
+        for (var _key in state) {
+          formData.append(_key, state[_key]);
         }
       }
 
@@ -5731,8 +5825,19 @@ var forms = function forms(state) {
       statusMessage.appendChild(textMessage);
       var api;
       item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api = path.question;
-      var json = JSON.stringify(Object.fromEntries(formData.entries()));
-      Object(_services_requsets__WEBPACK_IMPORTED_MODULE_9__["postData"])(api, json).then(function (data) {
+      var objFormData = Object.fromEntries(formData.entries()); // if (objFormData?.upload.name === '') {  // Нужно переписать через ?.
+      //     delete  objFormData.upload;
+      // }
+
+      if ('upload' in objFormData) {
+        // Нужно переписать через ?. ,Babel не дает
+        if (objFormData.upload.name === '') {
+          delete objFormData.upload;
+        }
+      }
+
+      var json = JSON.stringify(objFormData);
+      Object(_services_requsets__WEBPACK_IMPORTED_MODULE_8__["postData"])(api, json).then(function (data) {
         statusImg.setAttribute('src', message.ok); // statusImg.src = message.ok;
 
         textMessage.textContent = message.success;
@@ -5741,32 +5846,26 @@ var forms = function forms(state) {
 
         textMessage.textContent = message.failure;
       }).finally(function () {
-        clearInputs();
         setTimeout(function () {
           statusMessage.remove();
           item.style.display = 'block';
           item.classList.remove('fadeOutUp');
           item.classList.add('fadeInUp');
-        }, 5000); // setTimeout(() => {
-        //     const windows = document.querySelectorAll('[data-modal]');
-        //     windows.forEach(item => {
-        //         item.style.display = 'none';
-        //     });
-        //     document.body.style.overflow = '';
-        // }, 8000);
-      }); // postData('assets/server.php', formData)
-      //     .than(res => {
-      //         console.log(res);
-      //         statusMessage.textContent = message.success;
-      //     })
-      //     .catch(() => statusMessage.textContent = message.failure)
-      //     .finally(() => {
-      //         // form.reset();
-      //         clearInputs();
-      //         setTimeout(() => {
-      //             statusMessage.remove();
-      //         }, 5000);
-      //     });
+          clearInputs();
+        }, 5000);
+        setTimeout(function () {
+          var windows = document.querySelectorAll('[data-modal]');
+          windows.forEach(function (item) {
+            item.style.display = 'none';
+          });
+          document.body.style.overflow = '';
+          document.body.style.marginRight = "0px";
+
+          if (document.querySelector('.fixed-gift')) {
+            document.querySelector('.fixed-gift').style.marginRight = "0px";
+          }
+        }, 8000);
+      });
     });
   });
 };
@@ -5963,7 +6062,8 @@ var modals = function modals() {
   bindModal('.button-design', '.popup-design', '.popup-design .popup-close');
   bindModal('.button-consultation', '.popup-consultation', '.popup-consultation .popup-close');
   bindModal('.fixed-gift', '.popup-gift', '.popup-gift .popup-close', true);
-  openByScroll('.fixed-gift'); // showModalByTime('.popup-consultation', 3000, calcScroll());
+  openByScroll('.fixed-gift');
+  showModalByTime('.popup-consultation', 60000, calcScroll());
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (modals);
@@ -6287,7 +6387,6 @@ var showMoreStyles = function showMoreStyles(trigger, wrapper) {
       // createCards(res.styles);
       createCards(res);
     }).catch(function (error) {
-      console.log(error);
       var statusMessage = document.createElement('div');
       statusMessage.classList.add('status');
       statusMessage.style.cssText = 'color: red; font-size: 20px; margin: 30px;';

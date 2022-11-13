@@ -7,6 +7,7 @@ const changeModalState = (state) => {
     function bindActionToElems (elem, prop) {
         elem.addEventListener('change', () => {
             state[prop] = elem.value;
+            console.log(state)
         });
     }
 

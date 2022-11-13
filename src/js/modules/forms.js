@@ -26,35 +26,40 @@ const forms = (state) => {
         });
         upload.forEach(item => {
             item.previousElementSibling.textContent = 'Файл не выбран';
+            const preview = item.parentNode.parentNode.querySelector('img');
+            preview.src = '';
+            preview.style.display = 'none';
         })
         document.querySelectorAll('select').forEach(el => {
             el.selectedIndex = 0;
         })
         textarea[0].value = '';
+        // state = {};
+        // item.files = 
+        // console.log(upload.files)
+        // upload.forEach(item => {
+        //     console.log(item.files)
+        //     item.files = {};
+        // })
+        // console.log(state)
     };
-
-    upload.forEach(item => {
-        item.addEventListener('input', () => {
-            console.log(item.files[0]);
-            let dots;
-            const arr = item.files[0].name.split('.');
-            arr[0].length > 6 ? dots = '...' : dots = '.';
-            const name = arr[0].substring(0, 7) + dots + arr[1];
-            item.previousElementSibling.textContent = name;
-        })
-    });
 
     form.forEach(item => {
         item.addEventListener('submit', (e) => {
             e.preventDefault();
-            
+
             const formData = new FormData(item);
 
             if (item.classList.contains('calc_form')) {
                 if (!state.size || !state.material) {
                     return
                 }
-                for(let key in state) {
+                for (let key in state) {
+                    formData.append(key, state[key])
+                }
+            }
+            if (item.classList.contains('img_form')) {
+                for (let key in state) {
                     formData.append(key, state[key])
                 }
             }
@@ -80,7 +85,18 @@ const forms = (state) => {
             let api;
             item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api = path.question;
 
-            const json = JSON.stringify(Object.fromEntries(formData.entries()));
+            const objFormData = Object.fromEntries(formData.entries());
+
+            // if (objFormData?.upload.name === '') {  // Нужно переписать через ?.
+            //     delete  objFormData.upload;
+            // }
+            if ('upload' in objFormData) { // Нужно переписать через ?. ,Babel не дает
+                if(objFormData.upload.name === '') {
+                    delete  objFormData.upload;
+                }
+            }
+
+            const json = JSON.stringify(objFormData);
 
             postData(api, json)
                 .then(data => {
@@ -92,35 +108,25 @@ const forms = (state) => {
                     // statusImg.src = message.fail;
                     textMessage.textContent = message.failure;
                 }).finally(() => {
-                    clearInputs();
                     setTimeout(() => {
                         statusMessage.remove();
                         item.style.display = 'block';
                         item.classList.remove('fadeOutUp');
                         item.classList.add('fadeInUp');
+                        clearInputs();
                     }, 5000);
-                    // setTimeout(() => {
-                    //     const windows = document.querySelectorAll('[data-modal]');
-                    //     windows.forEach(item => {
-                    //         item.style.display = 'none';
-                    //     });
-                    //     document.body.style.overflow = '';
-                    // }, 8000);
+                    setTimeout(() => {
+                        const windows = document.querySelectorAll('[data-modal]');
+                        windows.forEach(item => {
+                            item.style.display = 'none';
+                        });
+                        document.body.style.overflow = '';
+                        document.body.style.marginRight = `0px`;
+                        if (document.querySelector('.fixed-gift')) {
+                            document.querySelector('.fixed-gift').style.marginRight = `0px`;
+                        }
+                    }, 8000);
                 })
-
-            // postData('assets/server.php', formData)
-            //     .than(res => {
-            //         console.log(res);
-            //         statusMessage.textContent = message.success;
-            //     })
-            //     .catch(() => statusMessage.textContent = message.failure)
-            //     .finally(() => {
-            //         // form.reset();
-            //         clearInputs();
-            //         setTimeout(() => {
-            //             statusMessage.remove();
-            //         }, 5000);
-            //     });
         });
     });
 };
